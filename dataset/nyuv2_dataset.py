@@ -126,8 +126,8 @@ class RandomHorizontalFlip(object):
 
 class MyCustomDataset(data.Dataset):
     # def __init__(self, root='/home/marian/calibration_ws/monodepth-FPN/MonoDepth-FPN-PyTorch/dataset/training_data/training_data/', seed=None, train=True):
-    # def __init__(self, root='/media/rambo/ssd2/Szilard/nyu_v2_filter/dataset_00/', seed=None, train=True):
-    def __init__(self, root='/media/rambo/ssd2/Szilard/pico_tofnest/4bag_unfiltered/dataset_filter/', seed=None, train=True):
+    def __init__(self, root='/media/rambo/ssd2/Szilard/nyu_v2_filter/dataset_00/', seed=None, train=True):
+    # def __init__(self, root='/media/rambo/ssd2/Szilard/pico_tofnest/4bag_unfiltered/dataset_filter/', seed=None, train=True):
 
         np.random.seed(seed)
         self.root = Path(root)
@@ -163,8 +163,8 @@ class MyCustomDataset(data.Dataset):
         depth = cv2.imread(path.replace('depth3', 'depthgt'),-1)
         # rgb = np.array(rgb,np.float32)
         # depth = np.array(depth,np.float32)
-        rgb = cv2.resize(rgb,(640,360))
-        depth = cv2.resize(depth,(640,360))
+        rgb = cv2.resize(rgb,(640,480))
+        depth = cv2.resize(depth,(640,480))
         
         rgb = np.array(rgb,np.float32,copy=True).transpose((2,0,1)) 
         depth = np.array(depth,np.float32,copy=True)[:, :, None].transpose((2,0,1))
@@ -184,7 +184,7 @@ class MyCustomDataset(data.Dataset):
         # plt.savefig('real1_'+'.png',bbox_inches='tight')
         # plt.close()
 
-        max_depth = 7000
+        max_depth = 10000
         # max_depth = depth.max()
         min_depth = 0
         max_ir = 3840
