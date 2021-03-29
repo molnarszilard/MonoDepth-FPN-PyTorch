@@ -47,9 +47,9 @@ class I2D(nn.Module):
         self.layer01=nn.Conv2d(3, 64, kernel_size=(7, 7), stride=(2,2), padding=(3, 3), bias=False)
         self.layer02=nn.BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
         self.layer03=nn.ReLU(inplace=True)
-        self.layer04=nn.MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
-        self.layer0 = nn.Sequential(resnet.conv1, resnet.bn1, resnet.relu, resnet.maxpool)
-        # self.layer0=nn.Sequential(self.layer01,self.layer02,self.layer03,self.layer04)
+        self.layer04=nn.MaxPool2d(kernel_size=3, stride=1, padding=1, dilation=1, ceil_mode=False)
+        # self.layer0 = nn.Sequential(resnet.conv1, resnet.bn1, resnet.relu, resnet.maxpool)
+        self.layer0=nn.Sequential(self.layer01,self.layer02,self.layer03,self.layer04)
         self.layer1 = nn.Sequential(resnet.layer1)
         self.layer2 = nn.Sequential(resnet.layer2)
         self.layer3 = nn.Sequential(resnet.layer3)
@@ -128,7 +128,7 @@ class I2D(nn.Module):
         
         # return self.predict2( self.up4(self.predict1(vol)) )
         pred1 = self.predict1(vol)
-        pred2 = F.interpolate(self.predict2(pred1), size=(H*4,W*4), mode='bilinear')
+        pred2 = F.interpolate(self.predict2(pred1), size=(H*2,W*2), mode='bilinear')
         valid = x[0][1]!=0.0
         pred3 = pred2.clone()
         pred3[0][0] = pred2[0][0] * valid
