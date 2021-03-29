@@ -126,7 +126,7 @@ if __name__ == '__main__':
         dlist.sort()
         time_sum = 0
         counter = 0
-        max_depth=6000.
+        max_depth=7000.
         min_depth=300.
         nan_number = torch.tensor(np.nan).to('cuda')
         eps_number = torch.tensor(1e-7).to('cuda')

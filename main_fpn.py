@@ -494,8 +494,8 @@ class DDDDepthDiff(nn.Module):
 
         """
          # K = [460.58518931365654, 0.0, 334.0805877590529, 0.0, 460.2679961517268, 169.80766383231037, 0.0, 0.0, 1.0] # pico zense
-        # K = [460.585, 0.0, 334.081, 0.0, 460.268, 169.808, 0.0, 0.0, 1.0] # pico zense
-        K = [582.62448167737955, 0.0, 313.04475870804731, 0.0, 582.69103270988637, 238.44389626620386, 0.0, 0.0, 1.0] # nyu_v2_dataset
+        K = [460.585, 0.0, 334.081, 0.0, 460.268, 169.808, 0.0, 0.0, 1.0] # pico zense
+        # K = [582.62448167737955, 0.0, 313.04475870804731, 0.0, 582.69103270988637, 238.44389626620386, 0.0, 0.0, 1.0] # nyu_v2_dataset
         # K = [582.624, 0.0, 313.045, 0.0, 582.691, 238.444, 0.0, 0.0, 1.0] # nyu_v2_dataset
         fx = K[0]
         fy = K[4]
@@ -531,8 +531,8 @@ class DDDDepthDiff(nn.Module):
     def image_from_cloud(self, point_cloud):
         
          # K = [460.58518931365654, 0.0, 334.0805877590529, 0.0, 460.2679961517268, 169.80766383231037, 0.0, 0.0, 1.0] # pico zense
-        # K = [460.585, 0.0, 334.081, 0.0, 460.268, 169.808, 0.0, 0.0, 1.0] # pico zense
-        K = [582.62448167737955, 0.0, 313.04475870804731, 0.0, 582.69103270988637, 238.44389626620386, 0.0, 0.0, 1.0] # nyu_v2_dataset
+        K = [460.585, 0.0, 334.081, 0.0, 460.268, 169.808, 0.0, 0.0, 1.0] # pico zense
+        # K = [582.62448167737955, 0.0, 313.04475870804731, 0.0, 582.69103270988637, 238.44389626620386, 0.0, 0.0, 1.0] # nyu_v2_dataset
         # K = [582.624, 0.0, 313.045, 0.0, 582.691, 238.444, 0.0, 0.0, 1.0] # nyu_v2_dataset
         fx = K[0]
         fy = K[4]
@@ -540,7 +540,7 @@ class DDDDepthDiff(nn.Module):
         cy = K[5]
         
         # point_cloud = point_cloud/1000.0
-        np_image = np.tile(0,(480,640))
+        np_image = np.tile(0,(360,640))
 
         z = point_cloud[:,2] * 1000.0
         x = point_cloud[:,0]
@@ -560,12 +560,12 @@ class DDDDepthDiff(nn.Module):
         
         pos_x[pos_x>639] = 639
         pos_x[pos_x<0] = 0
-        pos_y[pos_y>479] =479
+        pos_y[pos_y>359] =359
         pos_y[pos_y<0] = 0
 
-        pos_x = pos_x.reshape(480,640)
-        pos_y = pos_y.reshape(480,640)
-        z = z.reshape(480,640)
+        pos_x = pos_x.reshape(360,640)
+        pos_y = pos_y.reshape(360,640)
+        z = z.reshape(360,640)
         np_image[pos_y,pos_x] = z
 
         # depth = depth.cpu().detach().numpy()
@@ -654,8 +654,8 @@ class NormalsDiff(nn.Module):
 
         """
         # K = [460.58518931365654, 0.0, 334.0805877590529, 0.0, 460.2679961517268, 169.80766383231037, 0.0, 0.0, 1.0] # pico zense
-        # K = [460.585, 0.0, 334.081, 0.0, 460.268, 169.808, 0.0, 0.0, 1.0] # pico zense
-        K = [582.62448167737955, 0.0, 313.04475870804731, 0.0, 582.69103270988637, 238.44389626620386, 0.0, 0.0, 1.0] # nyu_v2_dataset
+        K = [460.585, 0.0, 334.081, 0.0, 460.268, 169.808, 0.0, 0.0, 1.0] # pico zense
+        # K = [582.62448167737955, 0.0, 313.04475870804731, 0.0, 582.69103270988637, 238.44389626620386, 0.0, 0.0, 1.0] # nyu_v2_dataset
         # K = [582.624, 0.0, 313.045, 0.0, 582.691, 238.444, 0.0, 0.0, 1.0] # nyu_v2_dataset
         fx = K[0]
         fy = K[4]
@@ -663,7 +663,7 @@ class NormalsDiff(nn.Module):
         cy = K[5]
 
         open3d_img = o3d.geometry.Image(depth[0]/1000.0)
-        intrinsics = o3d.camera.PinholeCameraIntrinsic(640,480,fx,fy,cx,cy)
+        intrinsics = o3d.camera.PinholeCameraIntrinsic(640,360,fx,fy,cx,cy)
         pcd = o3d.geometry.create_point_cloud_from_depth_image(open3d_img,intrinsic=intrinsics)
         
         # rows, cols = depth[0].shape
@@ -992,7 +992,7 @@ if __name__ == '__main__':
 
     train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=args.bs,
                                                    shuffle=True, num_workers=args.num_workers)
-    # nr_of_pixels = len(train_dataset)*640*480*3
+    # nr_of_pixels = len(train_dataset)*640*360*3
     # finding max depth and ir values
     # max_ir_value = 0
     # max_d_value = 0
@@ -1125,7 +1125,7 @@ if __name__ == '__main__':
     grad_factor = 10.
     normal_factor = 1.
     # max_depth = 6571
-    max_depth = 10000
+    max_depth = 7000
     
     #for visualizing the train and validation loss
     train_loss_arr = []
