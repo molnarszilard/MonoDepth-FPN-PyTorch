@@ -127,7 +127,7 @@ class RandomHorizontalFlip(object):
 class MyCustomDataset(data.Dataset):
     # def __init__(self, root='/home/marian/calibration_ws/monodepth-FPN/MonoDepth-FPN-PyTorch/dataset/training_data/training_data/', seed=None, train=True):
     # def __init__(self, root='/media/rambo/ssd2/Szilard/nyu_v2_filter/dataset_00/', seed=None, train=True):
-    def __init__(self, root='/media/rambo/ssd2/Szilard/pico_tofnest/1bag_augmented/dataset_filter/', seed=None, train=True):
+    def __init__(self, root='/media/rambo/ssd2/Szilard/pico_tofnest/4bag_unfiltered/dataset_filter/', seed=None, train=True):
 
         np.random.seed(seed)
         self.root = Path(root)
